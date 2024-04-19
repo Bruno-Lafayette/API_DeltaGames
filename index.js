@@ -13,5 +13,5 @@ app.listen(PORT, ()=>{
 })
 
 app.get('/', (req, res)=>{
-    res.send("olá mundo")
+    res.send("Bem vindo a API Delta Games")
 })

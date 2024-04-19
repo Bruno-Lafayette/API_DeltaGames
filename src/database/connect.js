@@ -1,11 +1,16 @@
-var knex = require('knex')({
-  client: 'mysql2',
-  connection: {
-    host       : '144.22.157.228',
-    port       : 3306,
-    user       : 'delta',
-    database   : 'Delta',
-    password   : 'delta'
-  }  
-})
-module.exports = knex
+const knex = require('knex');
+require('dotenv').config();
+
+const connection = {
+    client: 'mysql2',
+    connection: {
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+        user: process.env.DB_USER,
+        database: process.env.DB_DATABASE,
+        password: process.env.DB_PASSWORD
+    }
+};
+
+const db = knex(connection);
+module.exports = db;
