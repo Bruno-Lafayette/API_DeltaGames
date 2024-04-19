@@ -11,7 +11,3 @@ app.use(router);
 app.listen(PORT, ()=>{
     console.log(`Aplicação rodando na porta ${PORT}`)
 })
-
-app.get('/', (req, res)=>{
-    res.send("Bem vindo a API Delta Games")
-})
