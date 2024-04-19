@@ -8,6 +8,10 @@ app.use(express.json());
 app.use(router);
 
 
+app.use("/", (req, res)=>{
+    res.send("Bem vindo ao Delta Games API")
+})
+
 app.listen(PORT, ()=>{
     console.log(`Aplicação rodando na porta ${PORT}`)
 })
