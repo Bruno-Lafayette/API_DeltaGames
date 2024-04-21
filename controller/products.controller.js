@@ -3,9 +3,8 @@ const produtosController = {
     getAll: async (req, res) => {
         try {
             const [rows, fields] = await pool.query("SELECT p.PRODUTO_ID, p.PRODUTO_NOME, p.PRODUTO_DESC, p.PRODUTO_PRECO, p.PRODUTO_DESCONTO, p.CATEGORIA_ID, c.CATEGORIA_NOME, i.IMAGEM_ID, i.IMAGEM_URL FROM PRODUTO p JOIN CATEGORIA c ON p.CATEGORIA_ID = c.CATEGORIA_ID JOIN PRODUTO_IMAGEM i ON p.PRODUTO_ID = i.PRODUTO_ID;")
-            res.json({
-                data: rows
-            })
+            console.log(rows[0].PRODUTO_NOME)
+            res.json(rows)
         } catch (error) {
             console.log(error)
             res.json({
