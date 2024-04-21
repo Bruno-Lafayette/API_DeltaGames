@@ -1,17 +1,19 @@
-const PORT = 5000;
-const cors = require('cors')
-const express = require("express");
-const router = require('./src/routes/router')
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(router);
+const express = require("express")
+const app = express()
 
+require('dotenv').config()
 
-app.use("/", (req, res)=>{
-    res.send("Bem vindo ao Delta Games API")
-})
+app.use(express.urlencoded({extended: false}))
+app.use(express.json())
 
-app.listen(PORT, ()=>{
-    console.log(`Aplicação rodando na porta ${PORT}`)
+const postsRouter = require('./routes/posts.router')
+const authRouter = require('./routes/auth.router')
+
+app.use("/api/v1/products", postsRouter)
+app.use("/api/v1/auth", authRouter)
+
+const PORT = process.env.PORT || 8000
+
+app.listen(PORT, () => {
+    console.log("Server is running....")
 })
