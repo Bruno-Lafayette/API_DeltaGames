@@ -50,7 +50,7 @@ const authController = {
             const { USUARIO_SENHA: hash, 
                 USUARIO_ID: id, 
                 USUARIO_NOME: name, 
-                USUARIO_EMAIL: user_email, 
+                USUARIO_EMAIL: userEmail, 
                 USUARIO_CPF: cpf } = user[0]
 
             const check = await bcrypt.compare(password, hash)
@@ -64,7 +64,7 @@ const authController = {
                     //     name,
                     //     email
                     // }
-                    id, name, user_email, cpf
+                    id, name, userEmail, cpf
                  })
 
             }
