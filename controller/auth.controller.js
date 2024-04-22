@@ -58,12 +58,13 @@ const authController = {
             if (check) {
                 const accessToken = jwt.sign({ userId: id }, '3812932sjad34&*@', { expiresIn: '1h' });
                 return res.json({ 
-                    accessToken,
-                    data: { 
-                        userId: id,
-                        name,
-                        email
-                    }
+                    // accessToken,
+                    // data: { 
+                    //     userId: id,
+                    //     name,
+                    //     email
+                    // }
+                    id, name, user_email, cpf
                  })
 
             }
