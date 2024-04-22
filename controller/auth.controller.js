@@ -3,17 +3,30 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const authController = {
+
+    getUsers: async (req, res)=> {
+        try {
+            const [rows] = await pool.query("select * from USUARIO")
+            res.json({
+                rows
+            }) 
+        } catch (error) {
+            res.json({
+                error: error.message
+            })        
+        }
+    },
+
     register: async (req, res) => {
         try {
-            const { email, password, name } = req.body
-            const [user, ] = await pool.query("select * from users where email = ?", [email])
+            const { email, password, name, cpf } = req.body
+            const [user, ] = await pool.query("select * from USUARIO where USUARIO_EMAIL = ?", [email])
             if (user[0]) return res.json({ error: "Email already exists!" })
             
-
             const hash = await bcrypt.hash(password, 10)
-
-            const sql = "insert into users (email, password, name) values (?, ?, ?)"
-            const [rows, fields] = await pool.query(sql, [email, hash, name])
+            console.log(email, password, name, cpf)
+            const sql = "insert into USUARIO (USUARIO_NOME, USUARIO_EMAIL, USUARIO_SENHA, USUARIO_CPF) values (?, ?, ?, ?)"
+            const [rows, fields] = await pool.query(sql, [name, email, hash, cpf])
 
             if (rows.affectedRows) {
                 return res.json({ message: "Ok" })
@@ -31,10 +44,14 @@ const authController = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body
-            const [user, ] = await pool.query("select * from users where email = ?", [email])
+            const [user, ] = await pool.query("select * from USUARIO where USUARIO_EMAIL = ?", [email])
             if (!user[0]) return res.json({ error: "Invalid email!" })
             
-            const { password: hash, id, name } = user[0]
+            const { USUARIO_SENHA: hash, 
+                USUARIO_ID: id, 
+                USUARIO_NOME: name, 
+                USUARIO_EMAIL: user_email, 
+                USUARIO_CPF: cpf } = user[0]
 
             const check = await bcrypt.compare(password, hash)
 

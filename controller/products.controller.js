@@ -15,7 +15,7 @@ const produtosController = {
     getById: async (req, res) => {
         try {
             const { id } = req.params
-            const [rows, fields] = await pool.query("select * from posts where id = ?", [id])
+            const [rows, fields] = await pool.query("select * from PRODUTO where id = ?", [id])
             res.json({
                 data: rows
             })
