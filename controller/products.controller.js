@@ -1,4 +1,5 @@
 const pool = require("../database/index")
+
 const produtosController = {
     getAll: async (req, res) => {
         try {
