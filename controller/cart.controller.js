@@ -101,19 +101,20 @@ const cartController = {
     },
     
 
-    getAllProducts: async(req, res) => {
+    getAllProducts: async (req, res) => {
         try {
-            const [rows] = await pool.query("select * from CARRINHO_ITEM")
+            const { id } = req.body; // Extrair o id do usuário do corpo da requisição
+            const sql = "SELECT PRODUTO_ID AS product, ITEM_QTD AS qtd FROM CARRINHO_ITEM WHERE USUARIO_ID = ? AND ITEM_QTD > 0";
+            const [rows] = await pool.query(sql, [id]); // Passar o id como parâmetro na consulta SQL
             res.json({
                 rows
-            }) 
-        }catch(error){
-            res.json({
-                error: error.message
-            })
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            console.log(error.message);
         }
-
     }
+    
 
 }
 
