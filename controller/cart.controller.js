@@ -106,9 +106,15 @@ const cartController = {
             const { id } = req.body; // Extrair o id do usuário do corpo da requisição
             const sql = "SELECT PRODUTO_ID AS product, ITEM_QTD AS qtd FROM CARRINHO_ITEM WHERE USUARIO_ID = ? AND ITEM_QTD > 0";
             const [rows] = await pool.query(sql, [id]); // Passar o id como parâmetro na consulta SQL
-            res.json({
-                rows
-            });
+    
+            // Mapear os resultados para o formato desejado
+            const products = rows.map(row => ({
+                id: row.product,
+                product: row.product,
+                qtd: row.qtd
+            }));
+    
+            res.json(products); // Enviar os dados mapeados como resposta
         } catch (error) {
             res.status(500).json({ error: error.message });
             console.log(error.message);
