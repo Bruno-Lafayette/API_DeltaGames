@@ -21,7 +21,7 @@ const authController = {
         try {
             const { email, password, name, cpf } = req.body
             const [user, ] = await pool.query("select * from USUARIO where USUARIO_EMAIL = ?", [email])
-            if (user[0]) return res.json({ error: "Email already exists!" })
+            if (user[0]) return res.json({ message: "Email already exists!" })
             
             const hash = await bcrypt.hash(password, 10)
             console.log(email, password, name, cpf)
@@ -31,13 +31,13 @@ const authController = {
             if (rows.affectedRows) {
                 return res.json({ message: "Ok" })
             } else {
-                return res.json({ error: "Error" })
+                return res.json({ message: "Error" })
             }
             
         } catch (error) {
             console.log(error)
             res.json({
-                error: error.message
+                message: error.message
             })
         }
     },

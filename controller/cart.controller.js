@@ -74,7 +74,7 @@ const cartController = {
     
             // Se o produto não estiver no carrinho, retornar um erro
             if (existingRows.length === 0) {
-                return res.status(400).json({ error: "Este produto não está no carrinho." });
+                return res.status(400).json({ message: "Este produto não está no carrinho." });
             }
     
             // Iniciar uma transação
