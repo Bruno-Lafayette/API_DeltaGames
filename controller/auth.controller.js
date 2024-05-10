@@ -19,14 +19,14 @@ const authController = {
 
     register: async (req, res) => {
         try {
-            const { email, password, name, cpf } = req.body
-            const [user, ] = await pool.query("select * from USUARIO where USUARIO_EMAIL = ?", [email])
+            const { userEmail, password, name, cpf } = req.body
+            const [user, ] = await pool.query("select * from USUARIO where USUARIO_EMAIL = ?", [userEmail])
             if (user[0]) return res.json({ message: "Email already exists!" })
             
             const hash = await bcrypt.hash(password, 10)
             console.log(email, password, name, cpf)
             const sql = "insert into USUARIO (USUARIO_NOME, USUARIO_EMAIL, USUARIO_SENHA, USUARIO_CPF) values (?, ?, ?, ?)"
-            const [rows, fields] = await pool.query(sql, [name, email, hash, cpf])
+            const [rows, fields] = await pool.query(sql, [name, userEmail, hash, cpf])
 
             if (rows.affectedRows) {
                 return res.json({ message: "Ok" })
@@ -59,7 +59,7 @@ const authController = {
             if (check) {
                 const accessToken = jwt.sign({ userId: id }, '3812932sjad34&*@', { expiresIn: '1h' });
                 return res.json({ 
-                    id, name, userEmail, cpf, hash
+                    id, name, userEmail, cpf, password
                  })
 
             }
