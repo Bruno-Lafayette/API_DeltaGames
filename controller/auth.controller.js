@@ -24,7 +24,6 @@ const authController = {
             if (user[0]) return res.json({ message: "Email already exists!" })
             
             const hash = await bcrypt.hash(password, 10)
-            console.log(email, password, name, cpf)
             const sql = "insert into USUARIO (USUARIO_NOME, USUARIO_EMAIL, USUARIO_SENHA, USUARIO_CPF) values (?, ?, ?, ?)"
             const [rows, fields] = await pool.query(sql, [name, userEmail, hash, cpf])
 
