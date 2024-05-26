@@ -14,7 +14,7 @@ const addressRouter = require("./routes/address.router")
 app.use("/api/v1/products", postsRouter)
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/cart", cartRouter)
-app.use("/api/v1/cart", addressRouter)
+app.use("/api/v1/address", addressRouter)
 
 const PORT = process.env.PORT || 8000
 
