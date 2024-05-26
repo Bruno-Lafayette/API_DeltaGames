@@ -7,7 +7,7 @@ const addressController = {
 
             const insertSql = `
                 INSERT INTO ENDERECO 
-                (USUARIO_ID, ENDERECO_NOME, ENDERECO_LOGRADOURO, ENDERECO_NUMERO, ENDERECO_COMPLEMEMENTO, ENDERECO_CEP, ENDERECO_CIDADE, ENDERECO_ESTADO) 
+                (USUARIO_ID, ENDERECO_NOME, ENDERECO_LOGRADOURO, ENDERECO_NUMERO, ENDERECO_COMPLEMENTO, ENDERECO_CEP, ENDERECO_CIDADE, ENDERECO_ESTADO) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
@@ -25,7 +25,7 @@ const addressController = {
 
             const updateSql = `
                 UPDATE ENDERECO 
-                SET ENDERECO_NOME = ?, ENDERECO_LOGRADOURO = ?, ENDERECO_NUMERO = ?, ENDERECO_COMPLEMEMENTO = ?, ENDERECO_CEP = ?, ENDERECO_CIDADE = ?, ENDERECO_ESTADO = ?
+                SET ENDERECO_NOME = ?, ENDERECO_LOGRADOURO = ?, ENDERECO_NUMERO = ?, ENDERECO_COMPLEMENTO = ?, ENDERECO_CEP = ?, ENDERECO_CIDADE = ?, ENDERECO_ESTADO = ?
                 WHERE ENDERECO_ID = ?
             `;
 
@@ -64,7 +64,7 @@ const addressController = {
                 nome: row.ENDERECO_NOME,
                 logradouro: row.ENDERECO_LOGRADOURO,
                 numero: row.ENDERECO_NUMERO,
-                complemento: row.ENDERECO_COMPLEMEMENTO,
+                complemento: row.ENDERECO_COMPLEMENTO,
                 cep: row.ENDERECO_CEP,
                 cidade: row.ENDERECO_CIDADE,
                 estado: row.ENDERECO_ESTADO
