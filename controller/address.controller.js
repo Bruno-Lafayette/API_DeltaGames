@@ -3,7 +3,7 @@ const pool = require("../database/index")
 const addressController = {
     addEnd: async (req, res) => {
         try {
-            const { usuario_id, nome, logradouro, numero, complemento, cep, cidade, estado } = req.body;
+            const { usuario_id, nome, logradouro, numero, complemento, cep, localidade, uf } = req.body;
 
             const insertSql = `
                 INSERT INTO ENDERECO 
@@ -11,7 +11,7 @@ const addressController = {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
-            await pool.query(insertSql, [usuario_id, nome, logradouro, numero, complemento, cep, cidade, estado]);
+            await pool.query(insertSql, [usuario_id, nome, logradouro, numero, complemento, cep, localidade, uf]);
             res.json({ message: "Endereço adicionado com sucesso." });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -21,7 +21,7 @@ const addressController = {
 
     editEnd: async (req, res) => {
         try {
-            const { endereco_id, nome, logradouro, numero, complemento, cep, cidade, estado } = req.body;
+            const { endereco_id, nome, logradouro, numero, complemento, cep, localidade, uf } = req.body;
 
             const updateSql = `
                 UPDATE ENDERECO 
@@ -29,7 +29,7 @@ const addressController = {
                 WHERE ENDERECO_ID = ?
             `;
 
-            await pool.query(updateSql, [nome, logradouro, numero, complemento, cep, cidade, estado, endereco_id]);
+            await pool.query(updateSql, [nome, logradouro, numero, complemento, cep, localidade, uf, endereco_id]);
             res.json({ message: "Endereço atualizado com sucesso." });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -66,8 +66,8 @@ const addressController = {
                 numero: row.ENDERECO_NUMERO,
                 complemento: row.ENDERECO_COMPLEMENTO,
                 cep: row.ENDERECO_CEP,
-                cidade: row.ENDERECO_CIDADE,
-                estado: row.ENDERECO_ESTADO
+                localidade: row.ENDERECO_CIDADE,
+                uf: row.ENDERECO_ESTADO
             }));
 
             res.json(enderecos);
