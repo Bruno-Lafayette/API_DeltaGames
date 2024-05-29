@@ -63,9 +63,9 @@ const orderController = {
             const [pedidos] = await pool.query(selectPedidosSql, [usuario_id]);
     
             // Se nenhum pedido for encontrado, retornar uma mensagem apropriada
-            if (pedidos.length === 0) {
-                return res.status(404).json({ message: "Nenhum pedido encontrado para este usuário." });
-            }
+            // if (pedidos.length === 0) {
+            //     return res.status(404).json({ message: "Nenhum pedido encontrado para este usuário." });
+            // }
     
             // Buscar os itens de cada pedido
             for (const pedido of pedidos) {
