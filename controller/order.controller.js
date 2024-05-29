@@ -49,47 +49,38 @@ const orderController = {
             // Query para buscar pedidos do usuário
             const selectPedidosSql = `
                 SELECT 
-                    pi.PRODUTO_ID, 
-                    pi.PEDIDO_ID, 
-                    pi.ITEM_QTD, 
-                    pi.ITEM_PRECO
-                FROM PEDIDO_ITEM pi
-                JOIN PEDIDO p ON pi.PEDIDO_ID = p.PEDIDO_ID
+                    p.PEDIDO_ID, 
+                    p.USUARIO_ID, 
+                    p.ENDERECO_ID, 
+                    p.STATUS_ID, 
+                    ps.STATUS_DESC,
+                    p.PEDIDO_DATA 
+                FROM PEDIDO p
+                JOIN PEDIDO_STATUS ps ON p.STATUS_ID = ps.STATUS_ID
                 WHERE p.USUARIO_ID = ?
-            `  ;
+            `;
     
             const [pedidos] = await pool.query(selectPedidosSql, [usuario_id]);
     
             // Se nenhum pedido for encontrado, retornar uma mensagem apropriada
-            // if (pedidos.length === 0) {
-            //     return res.status(404).json({ message: "Nenhum pedido encontrado para este usuário." });
-            // }
+            if (pedidos.length === 0) {
+                return res.status(404).json({ message: "Nenhum pedido encontrado para este usuário." });
+            }
     
-            // Buscar todos os itens de todos os pedidos em uma única consulta
-            const selectItensSql = `
-                SELECT 
-                    pi.PRODUTO_ID, 
-                    pi.PEDIDO_ID, 
-                    pi.ITEM_QTD, 
-                    pi.ITEM_PRECO
-                FROM PEDIDO_ITEM pi
-                WHERE pi.PEDIDO_ID IN (?)
-            `;
-    
-            const pedidoIds = pedidos.map(pedido => pedido.PEDIDO_ID);
-            const [itens] = await pool.query(selectItensSql, [pedidoIds]);
-    
-            // Agrupar os itens por pedido
-            const itensPorPedido = itens.reduce((acc, item) => {
-                acc[item.PEDIDO_ID] = acc[item.PEDIDO_ID] || [];
-                acc[item.PEDIDO_ID].push(item);
-                return acc;
-            }, {});
-    
-            // Atribuir os itens correspondentes a cada pedido
-            pedidos.forEach(pedido => {
-                pedido.itens = itensPorPedido[pedido.PEDIDO_ID] || [];
-            });
+            // Buscar os itens de cada pedido
+            for (const pedido of pedidos) {
+                const selectItensSql = `
+                    SELECT 
+                        pi.PRODUTO_ID, 
+                        pi.PEDIDO_ID, 
+                        pi.ITEM_QTD, 
+                        pi.ITEM_PRECO
+                    FROM PEDIDO_ITEM pi
+                    WHERE pi.PEDIDO_ID = ?
+                `;
+                const [itens] = await pool.query(selectItensSql, [pedido.PEDIDO_ID]);
+                pedido.itens = itens;
+            }
     
             res.json(pedidos);
         } catch (error) {
