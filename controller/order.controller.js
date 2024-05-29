@@ -40,6 +40,54 @@ const orderController = {
         } finally {
             connection.release();
         }
+    },
+
+    getOrdersByUserId: async (req, res) => {
+        try {
+            const { usuario_id } = req.params;
+
+            // Query para buscar pedidos do usuário
+            const selectPedidosSql = `
+                SELECT 
+                    p.PEDIDO_ID, 
+                    p.USUARIO_ID, 
+                    p.ENDERECO_ID, 
+                    p.STATUS_ID, 
+                    ps.STATUS_DESC,
+                    p.PEDIDO_DATA 
+                FROM PEDIDO p
+                JOIN PEDIDO_STATUS ps ON p.STATUS_ID = ps.STATUS_ID
+                WHERE p.USUARIO_ID = ?
+            `;
+
+            const [pedidos] = await pool.query(selectPedidosSql, [usuario_id]);
+
+            // Se nenhum pedido for encontrado, retornar uma mensagem apropriada
+            if (pedidos.length === 0) {
+                return res.status(404).json({ message: "Nenhum pedido encontrado para este usuário." });
+            }
+
+            // Buscar itens para cada pedido
+            const selectItensSql = `
+                SELECT 
+                    pi.PRODUTO_ID, 
+                    pi.PEDIDO_ID, 
+                    pi.ITEM_QTD, 
+                    pi.ITEM_PRECO
+                FROM PEDIDO_ITEM pi
+                WHERE pi.PEDIDO_ID = ?
+            `;
+
+            for (const pedido of pedidos) {
+                const [itens] = await pool.query(selectItensSql, [pedido.PEDIDO_ID]);
+                pedido.itens = itens;
+            }
+
+            res.json(pedidos);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+            console.log(error.message);
+        }
     }
 };
 
