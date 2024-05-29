@@ -49,16 +49,14 @@ const orderController = {
             // Query para buscar pedidos do usuário
             const selectPedidosSql = `
                 SELECT 
-                    p.PEDIDO_ID, 
-                    p.USUARIO_ID, 
-                    p.ENDERECO_ID, 
-                    p.STATUS_ID, 
-                    ps.STATUS_DESC,
-                    p.PEDIDO_DATA 
-                FROM PEDIDO p
-                JOIN PEDIDO_STATUS ps ON p.STATUS_ID = ps.STATUS_ID
+                    pi.PRODUTO_ID, 
+                    pi.PEDIDO_ID, 
+                    pi.ITEM_QTD, 
+                    pi.ITEM_PRECO
+                FROM PEDIDO_ITEM pi
+                JOIN PEDIDO p ON pi.PEDIDO_ID = p.PEDIDO_ID
                 WHERE p.USUARIO_ID = ?
-            `;
+            `  ;
     
             const [pedidos] = await pool.query(selectPedidosSql, [usuario_id]);
     
@@ -79,7 +77,8 @@ const orderController = {
             `;
     
             const pedidoIds = pedidos.map(pedido => pedido.PEDIDO_ID);
-            const [itens] = await pool.query(selectItensSql, [pedidoIds]);
+            const [itens] = await pool.query(selectItensSql, [usuario_id]);
+
     
             // Agrupar os itens por pedido
             const itensPorPedido = itens.reduce((acc, item) => {
