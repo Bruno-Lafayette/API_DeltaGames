@@ -77,8 +77,7 @@ const orderController = {
             `;
     
             const pedidoIds = pedidos.map(pedido => pedido.PEDIDO_ID);
-            const [itens] = await pool.query(selectItensSql, [usuario_id]);
-
+            const [itens] = await pool.query(selectItensSql, [pedidoIds]);
     
             // Agrupar os itens por pedido
             const itensPorPedido = itens.reduce((acc, item) => {
