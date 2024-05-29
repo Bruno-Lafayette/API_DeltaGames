@@ -14,7 +14,7 @@ const addressController = {
             await pool.query(insertSql, [usuario_id, nome, logradouro, numero, complemento, cep, localidade, uf]);
             res.json({ message: "Endereço adicionado com sucesso." });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ message: error.message });
             console.log(error.message);
         }
     },
@@ -32,7 +32,7 @@ const addressController = {
             await pool.query(updateSql, [nome, logradouro, numero, complemento, cep, localidade, uf, endereco_id]);
             res.json({ message: "Endereço atualizado com sucesso." });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ message: error.message });
             console.log(error.message);
         }
     },
@@ -46,7 +46,7 @@ const addressController = {
             await pool.query(deleteSql, [endereco_id]);
             res.json({ message: "Endereço removido com sucesso." });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ message: error.message });
             console.log(error.message);
         }
     },
@@ -72,7 +72,7 @@ const addressController = {
 
             res.json(enderecos);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ message: error.message });
             console.log(error.message);
         }
     }
