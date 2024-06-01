@@ -41,9 +41,9 @@ const addressController = {
         try {
             const { endereco_id } = req.body;
 
-            const deleteSql = "DELETE FROM ENDERECO WHERE ENDERECO_ID = ?";
+            const updateSql = "UPDATE ENDERECO SET ENDERECO_APAGADO = 1 WHERE ENDERECO_ID = ?";
 
-            await pool.query(deleteSql, [endereco_id]);
+            await pool.query(updateSql, [endereco_id]);
             res.json({ message: "Endereço removido com sucesso." });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -55,7 +55,7 @@ const addressController = {
         try {
             const { usuario_id } = req.body;
 
-            const selectSql = "SELECT * FROM ENDERECO WHERE USUARIO_ID = ?";
+            const selectSql = "SELECT * FROM ENDERECO WHERE USUARIO_ID = ? AND ENDERECO_APAGADO = 0";
 
             const [rows] = await pool.query(selectSql, [usuario_id]);
 
