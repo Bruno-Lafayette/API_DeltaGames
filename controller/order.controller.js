@@ -27,11 +27,17 @@ const orderController = {
             for (const item of itens) {
                 const { produto_id, item_qtd, item_preco } = item;
                 await connection.query(insertItemSql, [produto_id, pedidoId, item_qtd, item_preco]);
+            
+                const updateStockSql = `
+                    UPDATE PRODUTO SET PRODUTO_ESTOQUE = PRODUTO_ESTOQUE - ? WHERE PRODUTO_ID = ?
+                `;
+                await connection.query(updateStockSql, [item_qtd, produto_id]);
+        
             }
 
             // Commit da transação
             await connection.commit();
-            res.json({ message: "Pedido criado com sucesso.", pedidoId });
+            res.json({ message: `Compra efetuada com sucesso. Número do pedido: ${pedidoId}`, pedidoId });
         } catch (error) {
             // Rollback da transação em caso de erro
             await connection.rollback();
