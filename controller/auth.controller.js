@@ -21,16 +21,16 @@ const authController = {
         try {
             const { userEmail, password, name, cpf } = req.body
             const [user, ] = await pool.query("select * from USUARIO where USUARIO_EMAIL = ?", [userEmail])
-            if (user[0]) return res.json({ message: "Email already exists!" })
+            if (user[0]) return res.json({ message: "Email já esta cadastrado em nosso sistema!" })
             
             const hash = await bcrypt.hash(password, 10)
             const sql = "insert into USUARIO (USUARIO_NOME, USUARIO_EMAIL, USUARIO_SENHA, USUARIO_CPF) values (?, ?, ?, ?)"
             const [rows, fields] = await pool.query(sql, [name, userEmail, hash, cpf])
 
             if (rows.affectedRows) {
-                return res.json({ message: "Ok" })
+                return res.json({ message: "Cadastro criado com sucesso" })
             } else {
-                return res.json({ message: "Error" })
+                return res.json({ message: "Não foi possivel criar o cadastro, tente novamente mais tarde" })
             }
             
         } catch (error) {

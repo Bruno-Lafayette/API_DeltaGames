@@ -29,7 +29,7 @@ const orderController = {
                 await connection.query(insertItemSql, [produto_id, pedidoId, item_qtd, item_preco]);
             
                 const updateStockSql = `
-                    UPDATE PRODUTO SET PRODUTO_ESTOQUE = PRODUTO_ESTOQUE - ? WHERE PRODUTO_ID = ?
+                    UPDATE PRODUTO_ESTOQUE SET PRODUTO_QTD = PRODUTO_QTD - ? WHERE PRODUTO_ID = ?
                 `;
                 await connection.query(updateStockSql, [item_qtd, produto_id]);
         
